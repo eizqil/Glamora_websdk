@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<title>Magic Shop. Login</title>
+
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+  <meta content="utf-8" http-equiv="encoding" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="text/javascript" src="utils.js"></script>
+  
+<script>
+(function(e,t,n,o){e.PeopleEventsObject=o;e[o]=e[o]||{init:function(t){e[o].apiKey=t},
+setPerson:function(t,n){e[o].person=t;e[o].personTtl=n},
+forgetPerson:function(){e[o].toForgetPerson=true},
+track:function(){(e[o].q=e[o].q||[]).push(arguments)},
+updatePerson:function(t){e[o].personToUpdate={person:t}},
+appendToList:function(t,n){e[o].attributeToAppend={attributeName:t,attribute:n}}};
+var r=t.createElement("script");
+var s=t.getElementsByTagName("script")[0];r.async=1;r.src=n;s.parentNode.insertBefore(r,s)})
+(window,document,'https://s3.eu-central-1.amazonaws.com/portal-cdn-production/people-events-sdk/pe.latest-2.js','pe');
+
+pe.init('8dbf14630365928c5cdd672534a9f29a-0a769b9b-dc7d-453e-b98d-8feb964a1bb6');
+</script>
+  
+</head>
+
+<body>
+  
+  
+  <header class="header">
+    <div class="fake-counter"></div>
+    <h1>Magic shop</h1>
+    <div class="counter" id="counter"></div>
+  </header>
+  <article class="register-content" id="registration">
+    <div class="field-container">
+      <div class="field">Email:</div>
+      <input class="input" id="email" />
+    </div>
+    <button class="button-register" onclick="login()" type="button">Sign In</button>
+  </article>
+  <script>
+    async function login() {
+      const email = document.getElementById('email').value;
+      
+      const person = {
+        email,
+      };
+      
+      saveUser(person);
+      
+      window.dataLayer.push({'user_id': email, 'event': 'login'});
+      console.log('User Logged In');
+      
+      setTimeout(() => { window.location = './' }, 3000);
+    }
+
+  </script>
+</body>
+
+</html>

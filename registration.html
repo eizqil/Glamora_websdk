@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta content="utf-8" http-equiv="encoding" />
+    <title>Magic Shop. Sign Up</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="text/javascript" src="utils.js"></script>
+    <script>
+      (function (e, t, n, o) {
+        e.PeopleEventsObject = o;
+        e[o] =
+          e[o] ||
+          {
+            init: function (apiKey) {
+              e[o].apiKey = apiKey;
+              console.log("Infobip People WebSDK Initialized");
+            },
+            setPerson: function (person, ttl) {
+              console.log("Setting person data:", person, "with TTL:", ttl);
+              e[o].person = person;
+              e[o].personTtl = ttl;
+            },
+            forgetPerson: function () {
+              console.log("Forgetting person data");
+              e[o].toForgetPerson = true;
+            },
+            track: function () {
+              console.log("Tracking event:", arguments);
+              (e[o].q = e[o].q || []).push(arguments);
+            },
+            updatePerson: function (person) {
+              console.log("Updating person data:", person);
+              e[o].personToUpdate = { person: person };
+            },
+            appendToList: function (attributeName, attribute) {
+              console.log("Appending attribute:", attributeName, "Value:", attribute);
+              e[o].attributeToAppend = { attributeName: attributeName, attribute: attribute };
+            },
+          };
+        var r = t.createElement("script");
+        var s = t.getElementsByTagName("script")[0];
+        r.async = 1;
+        r.src = n;
+        s.parentNode.insertBefore(r, s);
+      })(
+        window,
+        document,
+        "https://s3.eu-central-1.amazonaws.com/portal-cdn-production/people-events-sdk/pe.latest-2.js",
+        "pe"
+      );
+
+      // Initialize Infobip People Web SDK
+      pe.init("8dbf14630365928c5cdd672534a9f29a-0a769b9b-dc7d-453e-b98d-8feb964a1bb6"); // Replace with your Infobip API key
+    </script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="fake-counter"></div>
+      <h1>Magic Shop</h1>
+      <div class="counter" id="counter"></div>
+    </header>
+    <article class="register-content" id="registration">
+      <div class="field-container">
+        <div class="field">First name:</div>
+        <input class="input" id="firstName" />
+      </div>
+      <div class="field-container">
+        <div class="field">Last name:</div>
+        <input class="input" id="lastName" />
+      </div>
+      <div class="field-container">
+        <div class="field">Email:</div>
+        <input class="input" id="email" />
+      </div>
+      <div class="field-container">
+        <div class="field">Phone:</div>
+        <input class="input" id="phone" />
+      </div>
+      <button class="button-register" onclick="register()" type="button">Sign Up</button>
+    </article>
+    <script>
+      async function register() {
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+
+        if (!firstName || !lastName || !email || !phone) {
+          alert("All fields are required!");
+          return;
+        }
+
+        const person = {
+          firstName,
+          lastName,
+          email,
+          phone,
+        };
+
+        try {
+          // Set person data in Infobip
+          pe.setPerson(person, 3600); // TTL set to 3600 seconds (1 hour)
+
+          // Track sign-up event
+          pe.track("signup", {
+            user_id: email,
+            last_name: lastName,
+            first_name: firstName,
+          });
+          
+      saveUser(person);
+      
+      window.dataLayer.push({'user_id': email, 'last_name':lastName, 'first_name':firstName, 'event': 'signup'});
+          console.log("User Signed Up");
+
+          // Redirect after registration
+          setTimeout(() => {
+            window.location = "./";
+          }, 3000);
+        } catch (error) {
+          console.error("Error during registration:", error);
+        }
+      }
+    </script>
+  </body>
+</html>

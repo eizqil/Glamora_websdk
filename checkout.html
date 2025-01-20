@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<title>Magic Shop. Checkout</title>
+
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+  <meta content="utf-8" http-equiv="encoding" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="text/javascript" src="utils.js"></script>
+  
+<script>
+(function(e,t,n,o){e.PeopleEventsObject=o;e[o]=e[o]||{init:function(t){e[o].apiKey=t},
+setPerson:function(t,n){e[o].person=t;e[o].personTtl=n},
+forgetPerson:function(){e[o].toForgetPerson=true},
+track:function(){(e[o].q=e[o].q||[]).push(arguments)},
+updatePerson:function(t){e[o].personToUpdate={person:t}},
+appendToList:function(t,n){e[o].attributeToAppend={attributeName:t,attribute:n}}};
+var r=t.createElement("script");
+var s=t.getElementsByTagName("script")[0];r.async=1;r.src=n;s.parentNode.insertBefore(r,s)})
+(window,document,'https://s3.eu-central-1.amazonaws.com/portal-cdn-production/people-events-sdk/pe.latest-2.js','pe');
+
+pe.init('8dbf14630365928c5cdd672534a9f29a-0a769b9b-dc7d-453e-b98d-8feb964a1bb6');
+</script>
+  
+</head>
+
+<body>
+  
+  <header class="header">
+    <div class="fake-counter"></div>
+    <a class="delink" href="./">
+      <h1>Magic shop</h1>
+    </a>
+    <div class="counter">
+      <a class="delink" id="cart" href="./checkout.html">empty cart</a>
+    </div>
+  </header>
+  <article class="cart-content">
+    <div class="checkout">
+      <h2>Cart</h2>
+      <div class="cart-items">
+      </div>
+      <div class="cart-total">
+        <div class="cart-item">
+          <div class="cart-item-name">total:</div>
+          <div class="cart-item-price total"></div>
+        </div>
+      </div>
+      <div class="payment">
+        <h2>Payment</h2>
+        <div>
+          <input class="checkout-card-input" type="text" placeholder="card number" />
+        </div>
+        <div class="checkout-card-details">
+          <input class="checkout-month-input" type="text" placeholder="month" />
+          <input class="checkout-year-input" type="text" placeholder="year" />
+          <input class="checkout-cvv-input" type="password" placeholder="cvv" />
+        </div>
+        <button class="checkout-button-pay" type="button" onclick="pay()">
+          Pay
+        </button>
+        <button class="checkout-button-pay" type="button" onclick="cancel_order()">
+          Cancel
+        </button>
+      </div>
+  </article>
+  <script>
+    (async () => {
+      updateCartView('cart');
+      const cart = getCart();
+      if (!cart) {
+        return;
+      }
+      const cartItemsContainer = document.querySelector('.cart-items');
+      
+      cart.items.map(item => {
+        const cartItem = document.createElement("div");
+        cartItem.classList.add('cart-item');
+        const cartItemName = document.createElement("div");
+        cartItemName.innerText = `${item.name} x ${item.quantity}`;
+        cartItemName.classList.add('cart-item-name');
+        const cartItemPrice = document.createElement("div");
+        cartItemPrice.innerText = `$${item.price * item.quantity}`;
+        cartItemPrice.classList.add('cart-item-price');
+  
+        cartItem.appendChild(cartItemName);
+        cartItem.appendChild(cartItemPrice);
+  
+        cartItemsContainer.appendChild(cartItem);
+      });
+  
+      const total = document.querySelector('.total');
+      total.innerText = `$${cart.totalPrice}`;
+      window.dataLayer.push({'total': cart.totalPrice});
+    })()
+
+    async function pay() {
+      setTimeout(() => window.location = './success.html', 3000); 
+    }
+    
+    async function cancel_order() {
+      window.dataLayer.push({'event': 'cancel_order'});
+      console.log('Cart dropped');
+      removeCart();
+      setTimeout(() => window.location = './', 3000); 
+    }
+  </script>
+</body>
+
+</html>
